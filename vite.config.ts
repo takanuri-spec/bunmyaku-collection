@@ -28,6 +28,10 @@ export default defineConfig(({ mode }) => {
           target: `http://localhost:${apiPort}`,
           changeOrigin: true,
         },
+        '/parse-file': {
+          target: `http://localhost:${apiPort}`,
+          changeOrigin: true,
+        },
       },
     },
   }

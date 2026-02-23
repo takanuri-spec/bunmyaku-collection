@@ -3,6 +3,9 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const https = require('https');
+const os = require('os');
+const multer = require('multer');
+const { parseOffice } = require('officeparser');
 
 // .env.local を読み込む（既存の環境変数は上書きしない）
 const envPath = path.join(__dirname, '..', '.env.local');
@@ -61,6 +64,29 @@ app.post('/gemini', express.json({ limit: '10mb' }), (req, res) => {
 
   proxyReq.write(body);
   proxyReq.end();
+});
+
+// ファイル解析エンドポイント（PPTX / DOCX / XLSX → テキスト抽出）
+const upload = multer({
+  dest: os.tmpdir(),
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
+});
+
+app.post('/parse-file', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'ファイルが見つかりません' });
+  }
+  const tmpPath = req.file.path;
+  const cleanup = () => fs.unlink(tmpPath, () => {});
+
+  parseOffice(tmpPath, (err, text) => {
+    if (err) {
+      cleanup();
+      return res.status(500).json({ error: `ファイルの解析に失敗しました: ${err.message || err}` });
+    }
+    cleanup();
+    res.json({ text: text || '', filename: req.file.originalname });
+  }, { outputErrorToConsole: false });
 });
 
 // クロスラング読み取りAPI（読み取り専用・他インスタンスからのアクセス用）

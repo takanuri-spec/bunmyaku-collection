@@ -1,0 +1,49 @@
+{
+  "name": "bunmyaku-collection",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"vite\"",
+    "dev:ja": "concurrently \"npm run server:ja\" \"vite --mode ja\"",
+    "dev:en": "concurrently \"npm run server:en\" \"vite --mode en\"",
+    "server": "API_PORT=3001 node server/index.cjs",
+    "server:ja": "API_PORT=3001 DB_FILE=db.json INSTANCE_LANG=ja node server/index.cjs",
+    "server:en": "API_PORT=3002 DB_FILE=db_en.json INSTANCE_LANG=en node server/index.cjs",
+    "build": "tsc -b && vite build",
+    "build:en": "tsc -b && vite build --mode en",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.24",
+    "axios": "^1.13.5",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "json-server": "^0.17.4",
+    "postcss": "^8.5.6",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.13.0",
+    "tailwindcss": "^3.4.19",
+    "zustand": "^5.0.11"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.48.0",
+    "vite": "^7.3.1"
+  }
+}
